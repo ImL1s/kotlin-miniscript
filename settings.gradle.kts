@@ -18,3 +18,6 @@ rootProject.name = "kotlin-miniscript"
 
 include(":kotlin-crypto-pure")
 project(":kotlin-crypto-pure").projectDir = file("../kotlin-crypto-pure")
+
+include(":kotlin-address")
+project(":kotlin-address").projectDir = file("../kotlin-address")

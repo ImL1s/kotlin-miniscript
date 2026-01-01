@@ -30,6 +30,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":kotlin-crypto-pure")) // Core Scripts/Transactons
+                implementation(project(":kotlin-address")) // Bech32, Base58 checks
                 // implementation(project(":kotlin-bcur")) // Maybe needed later?
             }
         }

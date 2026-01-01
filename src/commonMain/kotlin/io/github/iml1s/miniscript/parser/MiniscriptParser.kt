@@ -60,6 +60,24 @@ private class Parser(private val input: String) {
 
     private fun parseExpression(): TokenTree {
         skipWhitespace()
+        
+        // Handle Brace group { ... }
+        if (pos < input.length && input[pos] == '{') {
+            consume('{')
+            val children = mutableListOf<TokenTree>()
+            while (pos < input.length && input[pos] != '}') {
+                children.add(parseExpression())
+                skipWhitespace()
+                if (pos < input.length && input[pos] == ',') {
+                    consume(',')
+                } else {
+                    break
+                }
+            }
+            consume('}')
+            return TokenTree("{", children)
+        }
+
         val start = pos
         while (pos < input.length && isNameChar(input[pos])) {
             pos++
@@ -86,7 +104,7 @@ private class Parser(private val input: String) {
     }
 
     private fun isNameChar(c: Char): Boolean {
-        return c.isLetterOrDigit() || c == '_' || c == ':' || c == '@'
+        return c.isLetterOrDigit() || c == '_' || c == ':' || c == '@' || c == '#' || c == '/' || c == '*' || c == '+' || c == '-' || c == '[' || c == ']'
     }
 
     private fun skipWhitespace() {

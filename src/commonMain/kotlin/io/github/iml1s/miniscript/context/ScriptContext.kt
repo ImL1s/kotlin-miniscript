@@ -38,7 +38,7 @@ object Segwitv0 : ScriptContext {
     override fun checkGlobalValidity(miniscript: Any) {}
     override fun maxSatisfactionSize(miniscript: Any): Int? = null // TODO
     override fun pkLen(pk: MiniscriptKey): Int = 33 // Compressed only
-    override fun parseKey(s: String): MiniscriptKey = throw NotImplementedError("Segwitv0 key parsing")
+    override fun parseKey(s: String): MiniscriptKey = io.github.iml1s.miniscript.StringKey(s)
 }
 
 object Tap : ScriptContext {
@@ -46,7 +46,7 @@ object Tap : ScriptContext {
     override fun checkGlobalValidity(miniscript: Any) {}
     override fun maxSatisfactionSize(miniscript: Any): Int? = null // TODO
     override fun pkLen(pk: MiniscriptKey): Int = 32 // X-only
-    override fun parseKey(s: String): MiniscriptKey = throw NotImplementedError("Taproot key parsing")
+    override fun parseKey(s: String): MiniscriptKey = io.github.iml1s.miniscript.StringKey(s)
 }
 
 object Legacy : ScriptContext {

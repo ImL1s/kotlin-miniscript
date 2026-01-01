@@ -178,7 +178,7 @@ data class Correctness(
 
     fun castVerify(): Correctness {
         val newBase = when (this.base) {
-            Base.B -> Base.V
+            Base.B, Base.K, Base.W -> Base.V
             else -> throw MiniscriptError.ChildBase1(this.base)
         }
         return copy(base = newBase, dissatisfiable = false, unit = false)

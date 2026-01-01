@@ -24,7 +24,37 @@ interface ToPublicKey : MiniscriptKey {
     fun toHash160(hash: ByteArray): ByteArray
 }
 
-data class StringKey(val content: String) : MiniscriptKey {
+data class StringKey(val content: String) : ToPublicKey {
     override val isXOnly: Boolean = false
     override fun toString(): String = content
+    override fun toPublicKey(): ByteArray {
+        return try {
+            io.github.iml1s.crypto.Hex.decode(content)
+        } catch (e: Exception) {
+            content.encodeToByteArray()
+        }
+    }
+    override fun toHash256(hash: ByteArray): ByteArray {
+        val digest = io.github.iml1s.crypto.Digests.sha256()
+        val d1 = ByteArray(digest.getDigestSize())
+        digest.update(toPublicKey(), 0, toPublicKey().size)
+        digest.doFinal(d1, 0)
+        digest.reset()
+        val d2 = ByteArray(digest.getDigestSize())
+        digest.update(d1, 0, d1.size)
+        digest.doFinal(d2, 0)
+        return d2
+    }
+    
+    override fun toRipemd160(hash: ByteArray): ByteArray {
+         return io.github.iml1s.crypto.Ripemd160.hash(toPublicKey())
+    }
+
+    override fun toHash160(hash: ByteArray): ByteArray {
+        val digest = io.github.iml1s.crypto.Digests.sha256()
+        val d1 = ByteArray(digest.getDigestSize())
+        digest.update(toPublicKey(), 0, toPublicKey().size)
+        digest.doFinal(d1, 0)
+        return io.github.iml1s.crypto.Ripemd160.hash(d1)
+    }
 }

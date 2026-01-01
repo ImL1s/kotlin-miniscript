@@ -31,6 +31,7 @@ import io.github.iml1s.miniscript.node.Terminal.Verify
 import io.github.iml1s.miniscript.node.Terminal.NonZero
 import io.github.iml1s.miniscript.node.Terminal.ZeroNotEqual
 import io.github.iml1s.miniscript.parser.MiniscriptParser
+import io.github.iml1s.miniscript.node.ScriptElt
 import io.github.iml1s.miniscript.types.ExtData
 import io.github.iml1s.miniscript.types.Type
 
@@ -45,6 +46,34 @@ data class Miniscript<Pk : MiniscriptKey, Ctx : ScriptContext>(
     /** Additional information helpful for extra analysis. */
     val ext: ExtData
 ) {
+    /**
+     * Convert this miniscript to its equivalent bitcoin script elements.
+     */
+    fun toScript(): List<ScriptElt> = node.toScript()
+
+    /**
+     * Convert to the underlying bitcoin script bytes (as hex string).
+     */
+    fun scriptPubKey(): String {
+        // Since we don't have a full ScriptWriter yet, let's just use toHexString on the list for now
+        // or implement a simple byte encoder in ScriptElt.
+        return toScript().joinToString("") {
+             when (it) {
+                 is ScriptElt.Op -> it.code.toString(16).padStart(2, '0')
+                 is ScriptElt.Push -> {
+                     val len = it.data.size
+                     val prefix = when {
+                         len < 0x4c -> len.toString(16).padStart(2, '0')
+                         len <= 0xff -> "4c" + len.toString(16).padStart(2, '0')
+                         len <= 0xffff -> "4d" + len.toString(16).padStart(2, '0') // Need byte order check
+                         else -> "4e" + len.toString(16).padStart(2, '0')
+                     }
+                     prefix + it.data.joinToString("") { b -> b.toUByte().toString(16).padStart(2, '0') }
+                 }
+                 is ScriptElt.RawBytes -> it.bytes.joinToString("") { b -> b.toUByte().toString(16).padStart(2, '0') }
+             }
+        }
+    }
     companion object {
         const val MAX_RECURSION_DEPTH = 402 // From rust-miniscript limits
 
@@ -93,13 +122,22 @@ data class Miniscript<Pk : MiniscriptKey, Ctx : ScriptContext>(
             var node: Terminal<Pk, Ctx> = when (name) {
                 "0", "FALSE" -> False()
                 "1", "TRUE" -> True()
-                "pk_k", "pk" -> {
-                    // pk alias for c:pk_k, generally handled by wrapper check or direct alias
+                "pk_k" -> {
                     val keyStr = tree.children.firstOrNull()?.name
                         ?: throw IllegalArgumentException("pk_k requires 1 child")
                     @Suppress("UNCHECKED_CAST")
                     val key = ctx.parseKey(keyStr) as Pk
                     Terminal.PkK(key)
+                }
+                "pk" -> {
+                    val keyStr = tree.children.firstOrNull()?.name
+                        ?: throw IllegalArgumentException("pk requires 1 child")
+                    @Suppress("UNCHECKED_CAST")
+                    val key = ctx.parseKey(keyStr) as Pk
+                    // pk(X) is an alias for c:pk_k(X)
+                    // We can't return here because wrappers might need to be applied.
+                    // Instead, we manually construct the 'c:' wrapped node and continue.
+                    Terminal.Check(fromAst(Terminal.PkK(key)))
                 }
                 "and_v" -> {
                     checkChildren(tree, 2)
@@ -179,11 +217,29 @@ data class Miniscript<Pk : MiniscriptKey, Ctx : ScriptContext>(
                     val time = tree.children[0].name.toUIntOrNull() ?: throw IllegalArgumentException("Invalid time")
                     Terminal.Older(RelLockTime(time))
                 }
+                "pkh" -> {
+                    checkChildren(tree, 1)
+                    val keyStr = tree.children[0].name
+                    @Suppress("UNCHECKED_CAST")
+                    val key = ctx.parseKey(keyStr) as Pk
+                    Terminal.PkH(key)
+                }
                 // Hashes
                 "sha256" -> {
                     checkChildren(tree, 1)
-                    // FIXME: Parse hash
-                    throw IllegalArgumentException("Parsing sha256 not yet implemented")
+                    Terminal.Sha256(io.github.iml1s.crypto.Hex.decode(tree.children[0].name))
+                }
+                "hash256" -> {
+                    checkChildren(tree, 1)
+                    Terminal.Hash256(io.github.iml1s.crypto.Hex.decode(tree.children[0].name))
+                }
+                "ripemd160" -> {
+                    checkChildren(tree, 1)
+                    Terminal.Ripemd160(io.github.iml1s.crypto.Hex.decode(tree.children[0].name))
+                }
+                "hash160" -> {
+                    checkChildren(tree, 1)
+                    Terminal.Hash160(io.github.iml1s.crypto.Hex.decode(tree.children[0].name))
                 }
                  // ... other fragments
                 else -> throw IllegalArgumentException("Unknown fragment: $name")
