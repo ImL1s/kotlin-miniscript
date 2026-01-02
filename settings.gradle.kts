@@ -16,8 +16,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "kotlin-miniscript"
 
-include(":kotlin-crypto-pure")
-project(":kotlin-crypto-pure").projectDir = file("../kotlin-crypto-pure")
+val cryptoPure = file("../kotlin-crypto-pure")
+if (cryptoPure.exists()) {
+    includeBuild(cryptoPure)
+}
 
-include(":kotlin-address")
-project(":kotlin-address").projectDir = file("../kotlin-address")
+val address = file("../kotlin-address")
+if (address.exists()) {
+    includeBuild(address)
+}
