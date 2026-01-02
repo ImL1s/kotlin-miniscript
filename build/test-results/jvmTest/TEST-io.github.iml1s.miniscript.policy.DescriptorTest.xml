@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.github.iml1s.miniscript.policy.DescriptorTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-01-01T13:45:01.729Z" hostname="WIN_DESKTOP" time="1.117">
+<testsuite name="io.github.iml1s.miniscript.policy.DescriptorTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-01-01T20:12:37.774Z" hostname="WIN_DESKTOP" time="1.123">
   <properties/>
-  <testcase name="testChecksum[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.025"/>
-  <testcase name="testWshDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.058"/>
+  <testcase name="testChecksum[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.029"/>
+  <testcase name="testWshDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.085"/>
   <testcase name="testShWpkhDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.003"/>
-  <testcase name="testPkhDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.001"/>
+  <testcase name="testPkhDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.002"/>
   <testcase name="testMultiDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.001"/>
-  <testcase name="testWpkhDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.0"/>
-  <testcase name="testAddrDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.015"/>
-  <testcase name="testRawDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.001"/>
-  <testcase name="testPkDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.001"/>
+  <testcase name="testWpkhDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.001"/>
+  <testcase name="testAddrDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.019"/>
+  <testcase name="testRawDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.002"/>
+  <testcase name="testPkDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.002"/>
   <testcase name="testShWshDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.0"/>
-  <testcase name="testTrTreeDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="1.005"/>
-  <testcase name="testSortedMultiDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.005"/>
+  <testcase name="testTrTreeDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.97"/>
+  <testcase name="testSortedMultiDescriptor[jvm]" classname="io.github.iml1s.miniscript.policy.DescriptorTest" time="0.006"/>
   <system-out><![CDATA[Descriptor: pkh(02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5)#h6utp3gv
 TR Script: b21a5cb9f109b29374e31f0ac90f45e888328503d7293be542ff58328720bdb2
 ]]></system-out>

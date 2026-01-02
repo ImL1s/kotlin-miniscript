@@ -6,6 +6,25 @@
 
 A pure Kotlin Multiplatform implementation of **Bitcoin Miniscript**, allowing for structured, analyzable, and composable Bitcoin Scripts. This library supports parsing, compilation, type checking, and Output Descriptors (BIP 380-386).
 
+## 🏗️ Architecture & Flow
+
+```mermaid
+graph TD
+    POL[Spending Policy] -->|Policy Compiler| MS[Miniscript AST]
+    DESC[Output Descriptor] --> MS
+    
+    subgraph "Analysis & Verification"
+        MS --> TYPE[Type Checker]
+        MS --> MALL[Malleability Check]
+        MS --> TIME[Timelock Analysis]
+    end
+    
+    MS -->|Compiler| BS[Bitcoin Script]
+    BS --> HEX[Raw ScriptPubKey Hex]
+```
+
+---
+
 ## 🚀 Features
 
 - **Miniscript AST**: Full implementation of the Miniscript language structure.
