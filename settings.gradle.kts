@@ -16,12 +16,16 @@ dependencyResolutionManagement {
 
 rootProject.name = "kotlin-miniscript"
 
-val cryptoPure = file("../kotlin-crypto-pure")
-if (cryptoPure.exists()) {
+val cryptoPure = listOf("../kotlin-crypto-pure", "./kotlin-crypto-pure")
+    .map { file(it) }
+    .firstOrNull { it.exists() }
+if (cryptoPure != null) {
     includeBuild(cryptoPure)
 }
 
-val address = file("../kotlin-address")
-if (address.exists()) {
+val address = listOf("../kotlin-address", "./kotlin-address")
+    .map { file(it) }
+    .firstOrNull { it.exists() }
+if (address != null) {
     includeBuild(address)
 }
