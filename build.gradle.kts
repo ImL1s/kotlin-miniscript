@@ -29,7 +29,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("io.github.iml1s:kotlin-crypto-pure:1.0.0") // Core Scripts/Transactons
+                implementation("io.github.iml1s:crypto-core:1.3.0") // Core Scripts/Transactons
                 implementation("io.github.iml1s:kotlin-address:1.0.0") // Bech32, Base58 checks
                 // implementation(project(":kotlin-bcur")) // Maybe needed later?
             }
