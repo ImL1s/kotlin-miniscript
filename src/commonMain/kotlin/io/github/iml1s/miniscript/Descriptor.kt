@@ -175,15 +175,15 @@ sealed class Descriptor<Pk : MiniscriptKey> {
              // BIP-341: P has implicit even Y.
              val pubKey33 = ByteArray(33)
              pubKey33[0] = 0x02
-             System.arraycopy(pubKey, 0, pubKey33, 1, 32)
+             pubKey.copyInto(pubKey33, destinationOffset = 1, startIndex = 0, endIndex = 32)
              
              val tweak = if (merkleRoot == null) {
                  TapTree.taggedHash("TapTweak", pubKey)
              } else {
                  // tagged_hash("TapTweak", pubKey || merkle_root)
                  val data = ByteArray(pubKey.size + merkleRoot.size)
-                 System.arraycopy(pubKey, 0, data, 0, pubKey.size)
-                 System.arraycopy(merkleRoot, 0, data, pubKey.size, merkleRoot.size)
+                 pubKey.copyInto(data, destinationOffset = 0)
+                 merkleRoot.copyInto(data, destinationOffset = pubKey.size)
                  TapTree.taggedHash("TapTweak", data)
              }
              
